@@ -53,6 +53,37 @@ export class UserService {
   return this.buildAuthResult(user);
 }
 
+async getUserById(id: string): Promise<UserResponse> {
+  const user = await this.userRepository.findById(id);
+  if (!user) throw new HttpException('User not found', 404);
+  return this.toUserResponse(user);
+}
+
+async updateProfile(
+  id: string,
+  updates: Partial<{ fullName: string; phone: string; bio: string; currentPassword: string; newPassword: string }>,
+  file?: Express.Multer.File
+): Promise<UserResponse> {
+  const user = await this.userRepository.findById(id);
+  if (!user) throw new HttpException('User not found', 404);
+
+  const fields: Record<string, any> = {};
+  if (updates.fullName) fields.fullName = updates.fullName;
+  if (updates.phone)    fields.phone    = updates.phone;
+  if (updates.bio)      fields.bio      = updates.bio;
+  if (file)             fields.avatar   = `/uploads/${file.filename}`;
+
+  if (updates.newPassword) {
+    if (!updates.currentPassword) throw new HttpException('Current password required', 400);
+    const valid = await bcrypt.compare(updates.currentPassword, user.password!);
+    if (!valid) throw new HttpException('Current password is incorrect', 400);
+    fields.password = await bcrypt.hash(updates.newPassword, CONSTANTS.SALT_ROUNDS);
+  }
+
+  const updated = await this.userRepository.update(id, fields);
+  return this.toUserResponse(updated!);
+}
+
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
   private buildAuthResult(user: IUserDocument): AuthResult {

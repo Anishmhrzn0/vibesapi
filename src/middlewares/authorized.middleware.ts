@@ -1,29 +1,43 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { CONSTANTS } from '../configs/constant';
-import { sendError } from '../utils/apihelper.util';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { CONSTANTS } from "../configs/constant";
+import { UserRepository } from "../repositories/user.repository";
 
 export interface AuthRequest extends Request {
   userId?: string;
-  userEmail?: string;
 }
 
-export function authorized(req: AuthRequest, res: Response, next: NextFunction): void {
-  const authHeader = req.headers.authorization;
+interface JwtPayload {
+  sub: string;  // ✅ was userId, service signs with sub
+}
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    sendError(res, 'Unauthorized — no token provided', 401);
-    return;
-  }
+const userRepository = new UserRepository();
 
-  const token = authHeader.split(' ')[1];
-
+export const authorize = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
-    const payload = jwt.verify(token, CONSTANTS.JWT_SECRET) as { sub: string; email: string };
-    req.userId    = payload.sub;
-    req.userEmail = payload.email;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      res.status(401).json({ success: false, message: "No token provided" });
+      return;
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, CONSTANTS.JWT_SECRET) as JwtPayload;
+    const user = await userRepository.findById(decoded.sub);  // ✅ async MongoDB lookup
+
+    if (!user) {
+      res.status(401).json({ success: false, message: "User not found" });
+      return;
+    }
+
+    req.userId = decoded.sub;  // ✅ was decoded.userId
     next();
   } catch {
-    sendError(res, 'Unauthorized — invalid or expired token', 401);
+    res.status(401).json({ success: false, message: "Invalid or expired token" });
   }
-}
+};

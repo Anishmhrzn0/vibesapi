@@ -5,7 +5,7 @@ export class UserRepository {
   async findByEmail(email: string): Promise<IUserDocument | null> {
     return UserModel
   .findOne({ email: email.toLowerCase() })
-  .select('+password')
+  .select('+password')  
   .exec();
   }
 
@@ -26,4 +26,7 @@ export class UserRepository {
     const user = await this.findByEmail(email);
     return user !== null;
   }
+  async update(id: string, fields: Record<string, any>): Promise<IUserDocument | null> {
+  return UserModel.findByIdAndUpdate(id, fields, { new: true }).exec();
+}
 }

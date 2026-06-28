@@ -2,7 +2,7 @@ export interface IUser {
   _id:       string;
   fullName:  string;
   email:     string;
-  phone:     string;
+  phone?:     string;
   password:  string;
   createdAt: Date;
 }
@@ -11,7 +11,7 @@ export interface UserResponse {
   id:        string;
   fullName:  string;
   email:     string;
-  phone:     string;
+  phone?:     string;
   createdAt: Date;
 }
 

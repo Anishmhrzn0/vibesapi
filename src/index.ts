@@ -1,12 +1,19 @@
-import app from './app';
-import { connectDb } from './database/mongodb';
-import { CONSTANTS } from './configs/constant';
+import dotenv from "dotenv";
+dotenv.config();
 
-async function bootstrap() {
+import app from "./app";
+import { connectDb } from "./database/mongodb";
+
+const PORT = process.env.PORT || 4000;
+
+const start = async () => {
   await connectDb();
-  app.listen(CONSTANTS.PORT, () => {
-    console.log(`Server running on http://localhost:${CONSTANTS.PORT}`);
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
   });
-}
+};
 
-bootstrap();
+start().catch((err) => {
+  console.error("❌ Failed to start:", err);
+  process.exit(1);
+});
