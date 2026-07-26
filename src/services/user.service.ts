@@ -102,9 +102,10 @@ async updateProfile(
   private toUserResponse(user: IUserDocument): UserResponse {
     return {
       id:        user._id.toString(),
-      fullName:  user.fullName,
+      fullName:  user.fullName || (user as any).name || "",
       email:     user.email,
-      phone:     user.phone,
+      phone:     user.phone || (user as any).phoneNumber || "",
+      role:      user.role || "user",
       createdAt: user.createdAt,
     };
   }

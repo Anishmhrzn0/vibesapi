@@ -12,6 +12,7 @@ export interface UserResponse {
   fullName:  string;
   email:     string;
   phone?:     string;
+  role?:      string;
   createdAt: Date;
 }
 

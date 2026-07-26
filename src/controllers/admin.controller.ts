@@ -4,7 +4,6 @@ import { AdminRequest } from "../middlewares/admin.middleware";
 import { UserModel, UserRole } from "../models/user.model";
 import { CONSTANTS } from "../configs/constant";
 
-// ── helpers ──────────────────────────────────────────────────────────────
 const toPublic = (u: any) => ({
   id:        u._id.toString(),
   fullName:  u.fullName,
@@ -18,7 +17,6 @@ const toPublic = (u: any) => ({
 
 const ALLOWED_ROLES: UserRole[] = ["user", "admin"];
 
-// GET /api/v1/admin/users?page=1&limit=10&search=term
 export const listUsers = async (req: AdminRequest, res: Response): Promise<void> => {
   try {
     const page   = Math.max(1, parseInt(req.query.page as string) || 1);
@@ -56,7 +54,6 @@ export const listUsers = async (req: AdminRequest, res: Response): Promise<void>
   }
 };
 
-// GET /api/v1/admin/users/:id
 export const getUserById = async (req: AdminRequest, res: Response): Promise<void> => {
   try {
     const user = await UserModel.findById(req.params.id);
@@ -70,7 +67,7 @@ export const getUserById = async (req: AdminRequest, res: Response): Promise<voi
   }
 };
 
-// POST /api/v1/admin/users
+
 export const createUser = async (req: AdminRequest, res: Response): Promise<void> => {
   try {
     const { fullName, email, phone, password, role = "user" } = req.body;
@@ -110,7 +107,6 @@ export const createUser = async (req: AdminRequest, res: Response): Promise<void
   }
 };
 
-// PUT/PATCH /api/v1/admin/users/:id
 export const updateUser = async (req: AdminRequest, res: Response): Promise<void> => {
   try {
     const { fullName, email, phone, role, bio, password } = req.body;
@@ -156,7 +152,7 @@ export const updateUser = async (req: AdminRequest, res: Response): Promise<void
 
     res.json({ success: true, data: toPublic(user) });
   } catch (err) {
-    console.error("[PUT /admin/users/:id]", err);
+    console.error("[PUT /admin/users/:id] FULL ERROR:", err);   // ✅ add this
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
