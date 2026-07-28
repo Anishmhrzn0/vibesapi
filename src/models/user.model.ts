@@ -11,6 +11,8 @@ export interface IUserDocument extends Document {
   avatar?: string;
   role : UserRole;
   createdAt: Date;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
 }
 
 const userSchema = new Schema<IUserDocument>(
@@ -22,6 +24,8 @@ const userSchema = new Schema<IUserDocument>(
     bio:      { type: String },
     role:     { type: String, enum: ["user", "admin"], default: "user" },
     avatar:   { type: String },
+    resetPasswordToken: { type: String, select: false },
+    resetPasswordExpires: { type: Date, select: false },
   },
   { timestamps: true }
 );

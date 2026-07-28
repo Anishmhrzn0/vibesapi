@@ -5,7 +5,7 @@
     "dev": "npx tsx --watch src/index.ts",
     "start": "node day1.js",
     "start-day2": "node day2.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --runInBand"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "@types/supertest": "^7.2.0",
     "@types/uuid": "^10.0.0",
     "jest": "^30.4.2",
+    "mongodb-memory-server": "^11.2.0",
     "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
@@ -28,6 +29,7 @@
   "dependencies": {
     "@nestjs/mongoose": "^11.0.4",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/nodemailer": "^8.0.1",
     "axios": "^1.18.1",
     "bcryptjs": "^3.0.3",
     "class-transformer": "^0.5.1",
@@ -42,6 +44,7 @@
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
     "multer-storage-cloudinary": "^4.0.0",
+    "nodemailer": "^9.0.3",
     "ts-jest": "^29.4.11",
     "tsx": "^4.21.0",
     "uuid": "^14.0.1",

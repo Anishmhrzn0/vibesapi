@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import bookingRoutes from "./routes/booking.route";
 import sellerRoutes from './routes/seller.routes';
 import notificationRoutes from "./routes/notification.routes";
+import assistantRoutes from './routes/assistant.routes';
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/v1/auth', authRoutes); 
+app.use("/api/v1/assistant", assistantRoutes);
 
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

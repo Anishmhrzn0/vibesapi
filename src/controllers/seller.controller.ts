@@ -2,8 +2,9 @@ import { Response } from "express";
 import Car, { ICar } from "../models/car.model";
 import { AuthRequest } from "../middlewares/authorized.middleware";
 
+
 /** Maps a raw Car document to the shape the seller dashboard UI expects. */
-function toSellerListingDTO(car: ICar & { _id: any }) {
+export function toSellerListingDTO(car: ICar & { _id: any }) {
   const status: "active" | "pending" | "booked" | "sold" = car.soldAt
     ? "sold"
     : car.isBooked

@@ -180,3 +180,14 @@ export const getWishlist = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: "Failed to fetch wishlist", error: (err as Error).message });
   }
 };
+// GET /api/cars/purchases/mine — cars the logged-in user has booked or bought
+export const getMyPurchases = async (req: AuthRequest, res: Response) => {
+  try {
+    const cars = await Car.find({ buyerId: req.userId })
+      .populate("sellerId", "fullName")
+      .sort({ createdAt: -1 });
+    res.json(cars);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch your purchases", error: (err as Error).message });
+  }
+};

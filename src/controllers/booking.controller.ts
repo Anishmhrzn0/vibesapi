@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 import Car from "../models/car.model";
 import Booking from "../models/booking.model";
 import Notification from "../models/notification.model";
@@ -37,7 +36,7 @@ export async function createBooking(req: AuthRequest, res: Response) {
     if (car.soldAt) return res.status(409).json({ message: "This car has already been sold" });
 
     const { rate, depositAmount, commissionAmount } = calculateBookingDeposit(car.price);
-    const transactionUuid = uuidv4();
+    const transactionUuid = crypto.randomUUID();
 
     const booking = await Booking.create({
       carId: car._id,

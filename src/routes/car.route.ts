@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authorize } from "../middlewares/authorized.middleware";
 import { adminOnly } from "../middlewares/admin.middleware";
 import { upload } from "../middlewares/upload.middleware";
-import { bookCar, deleteMyCar, getWishlist, toggleSaveCar } from "../controllers/car.controller";
+import { bookCar, deleteMyCar, getMyPurchases, getWishlist, toggleSaveCar } from "../controllers/car.controller";
 import { getAllCarsAdmin, updateCarAdmin } from "../controllers/admin-car.controller";
 import {
   createCar,
@@ -44,5 +44,6 @@ router.post("/:id/save", authorize, toggleSaveCar);
 router.get("/wishlist/mine", authorize, getWishlist);
 router.get("/admin/all", adminOnly, getAllCarsAdmin);
 router.patch("/admin/:id/edit", adminOnly, updateCarAdmin);
+router.get("/purchases/mine", authorize, getMyPurchases);
 
 export default router;
